@@ -1,5 +1,8 @@
 package br.com.heredia.marketplace.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,31 +19,37 @@ import br.com.heredia.marketplace.repository.ProductRepository;
 @Controller
 @RequestMapping("/")
 public class MarketplaceController {
+	
+	DecimalFormat fmt = new DecimalFormat("0.00");
 
 	@Autowired
 	private ProductRepository productRepository;
 	
 	private List<Product> cart = new ArrayList<Product>();
 	
-	Double totalTaxes = 0.00;
-    Double totalPrice = 0.00;
+	Double totalTaxes = 0.00D;
+    Double totalPrice = 0.00D;
 	
 	@RequestMapping(value = "/addToCart/{id}", method = RequestMethod.GET)
     public String addToCart(@PathVariable String id) {
 		Product product = productRepository.findById(Long.parseLong(id)).get();
 		
-		Double taxes = 0.00;
+		Double taxes = 0.00D;
   	  
 	  	if(product.getImported()) {
-	  		taxes += product.getPrice()*0.05;
+	  		taxes += product.getPrice()*0.05D;
 	  	}
 	  	if(product.getType().equals("music") || product.getType().equals("beauty")) {
-	  		taxes += product.getPrice()*0.1;
+	  		taxes += product.getPrice()*0.1D;
 	  	}
 	  	
-	  	totalTaxes += taxes;
-	  	totalPrice += product.getPrice()+taxes;
-	  	product.setPrice(product.getPrice()+taxes);
+	  	if(taxes>0) {
+	  		taxes = Math.ceil(taxes / 0.05D) * 0.05D;
+		  	totalTaxes += taxes;
+		  	product.setPrice(new BigDecimal(product.getPrice()+taxes).setScale(2, RoundingMode.HALF_EVEN).doubleValue());
+	  	} 
+	  	
+	  	totalPrice += product.getPrice();
 	  	
 	  	cart.add(product);
 		return "redirect:/";
@@ -58,8 +67,8 @@ public class MarketplaceController {
 	@RequestMapping(value = "/reset", method = RequestMethod.GET)
     public String clearCart() {
 		this.cart = new ArrayList<Product>();
-		totalTaxes = 0.00;
-	    totalPrice = 0.00;
+		totalTaxes = 0.00D;
+	    totalPrice = 0.00D;
 		return "redirect:/";
 	}
 	
@@ -70,8 +79,8 @@ public class MarketplaceController {
                 model.addAttribute("products", listProducts);
           }
           
-          model.addAttribute("totalTaxes", totalTaxes);
-          model.addAttribute("totalPrice", totalPrice);
+          model.addAttribute("totalTaxes", fmt.format(totalTaxes));
+          model.addAttribute("totalPrice", fmt.format(new BigDecimal(totalPrice).setScale(2, RoundingMode.HALF_EVEN).doubleValue()));
           model.addAttribute("cart", cart);
           return "market";
     }
