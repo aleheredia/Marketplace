@@ -6,7 +6,7 @@
 	<title>Product List</title>
 </head>
 <body>
-	<h2>Product List</h2>
+	<h2>Product List <a class="btn btn-default" th:href="@{'/products'}">+</a></h2>
 	<div class="container" th:unless="${#lists.isEmpty(products)}">
 		<table class="table table-striped">
 	   		<thead>
@@ -22,7 +22,7 @@
 	    		<tr th:each="product : ${products}">
 			      <td><span th:text="${product.description}">Description</span></td>
 			      <td><span th:text="${product.type}">Type</span></td>
-			      <td><span th:text="${product.price}">Price</span></td>
+			      <td><span th:text="${#numbers.formatCurrency(product.price)}">Price</span></td>
 			      <td><span th:text="${product.imported}">Imported</span></td>
 			      <td><a class="btn btn-default" th:href="@{'/addToCart/'+${product.id}}">Add to Cart</a>
 	    		</tr>
@@ -48,14 +48,14 @@
 	    		<tr th:each="product : ${cart}">
 			      <td><span th:text="${product.description}">Description</span></td>
 			      <td><span th:text="${product.type}">Type</span></td>
-			      <td><span th:text="${product.price}">Price</span></td>
+			      <td><span th:text="${#numbers.formatCurrency(product.price)}">Price</span></td>
 			      <td><span th:text="${product.imported}">Imported</span></td>
 	    		</tr>
 	    	</tbody>
 	    </table>
 	    
-	    <p>Sales Taxes: <span th:text="${totalTaxes}"> </span></p>
-	    <p>Total: <span th:text="${totalPrice}"> </span></p>
+	    <p>Sales Taxes: R$ <span th:text="${totalTaxes}"> </span></p>
+	    <p>Total: R$ <span th:text="${totalPrice}"> </span></p>
 	    
 	</div>
 	<div th:if="${#lists.isEmpty(products)}">

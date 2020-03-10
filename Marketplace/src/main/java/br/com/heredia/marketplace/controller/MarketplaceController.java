@@ -88,6 +88,7 @@ public class MarketplaceController {
     @RequestMapping(value = "/products", method = RequestMethod.POST)
     public String addProduct(Product product) {
     	if(product.getImported()==null) product.setImported(false);
+    	product.setPrice(new BigDecimal(product.getPrice()).setScale(2, RoundingMode.HALF_EVEN).doubleValue());
     	productRepository.save(product);
           return "redirect:/products";
     }

@@ -1,87 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-	<title>Product List</title>
+<link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<title>Product List</title>
 </head>
 <body>
-  <h2>Product List</h2>
-  <div class="container" th:unless="${#lists.isEmpty(products)}">
-    <table class="table table-striped">
-   		<thead>
-    		<tr>
-    			<th>Description</th>
-    			<th>Type</th>
-    			<th>Price</th>
-    			<th>Imported</th>
-    		</tr>
-    	</thead>
-    	<tbody>
-    		<tr th:each="product : ${products}">
-		      <td><span th:text="${product.description}">Description</span></td>
-		      <td><span th:text="${product.type}">Type</span></td>
-		      <td><span th:text="${product.price}">Price</span></td>
-		      <td><span th:text="${product.imported}">Imported</span></td>
-    		</tr>
-    	</tbody>
-    </table>
-  </div>
-  <div th:if="${#lists.isEmpty(products)}">
-    <p>There are no products.</p>
-  </div>
-  <hr />
-  <h3>Add a new product:</h3>
-  <div class="container">
-	<form method="POST">
-		<div class="row">
-			<div class="col-sm-4">
-			  	<div class="form-group">
-				    <label for="description">Description:</label> 
-				    <input class="form-control" type="text" name="description" size="50"></input>
-				</div>  
+	<h3>Add a new product:</h3>
+	<div class="container">
+		<form method="POST">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="description">Description:</label> <input
+							class="form-control" type="text" name="description" size="50"></input>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2">
-				<div class="form-group">  
-				    <label for="type">Type:</label> 
-				    <select  class="form-control" name="type">
-				    	<option disabled>Select one</option>
-				    	<option value="books">Books</option>
-				    	<option value="music">Music</option>
-				    	<option value="food">Food</option>
-				    	<option value="beauty">Beauty</option>
-				    	<option value="medical">Medical</option>
-				    </select>
-				</div>   
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="type">Type:</label> <select class="form-control"
+							name="type">
+							<option disabled>Select one</option>
+							<option value="books">Books</option>
+							<option value="music">Music</option>
+							<option value="food">Food</option>
+							<option value="beauty">Beauty</option>
+							<option value="medical">Medical</option>
+						</select>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2"> 
-			    <div class="form-group">
-				    <label for="price">Price:</label><br />
-				    <input class="form-control" type="text" name="price" size="10"></input>
-			    </div>
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="price">Price:</label><br /> <input
+							class="form-control" type="text" name="price" size="10"></input>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2">
-			    <div class="form-check">
-				    <input class="form-check-input" type="checkbox" name="imported"></input>
-				    <label class="form-check-label" for="imported">Imported</label><br />
-			    </div>
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" name="imported"></input>
+						<label class="form-check-label" for="imported">Imported</label><br />
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2">
-			    <div class="form-group">
-			     	<input class="btn btn-primary" type="submit" value="Add Product"></input>
-			    </div>
-		  	</div>
-		</div>
-	  </form>
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Add Product"></input>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
-  	<script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<hr />
+	<h2>Product List</h2>
+	<div class="container" th:unless="${#lists.isEmpty(products)}">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Type</th>
+					<th>Price</th>
+					<th>Imported</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="product : ${products}">
+					<td><span th:text="${product.description}">Description</span></td>
+					<td><span th:text="${product.type}">Type</span></td>
+					<td><span th:text="${#numbers.formatCurrency(product.price)}">Price</span></td>
+					<td><span th:text="${product.imported}">Imported</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:if="${#lists.isEmpty(products)}">
+		<p>There are no products.</p>
+	</div>
+	<script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </body>
 </html>
